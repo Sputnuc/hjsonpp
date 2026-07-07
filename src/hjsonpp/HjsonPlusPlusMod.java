@@ -1,55 +1,24 @@
 package hjsonpp;
 
-import arc.Events;
-import hjsonpp.expand.blocks.energy.AdjustableBeamNode;
-import hjsonpp.expand.blocks.crafting.*;
-import hjsonpp.expand.blocks.defense.*;
-import hjsonpp.expand.blocks.environment.*;
-import hjsonpp.expand.blocks.storage.*;
-import hjsonpp.expand.customAbilities.*;
-import hjsonpp.expand.graphics.g3d.*;
-import hjsonpp.expand.wproc.*;
-import mindustry.game.EventType;
 import mindustry.mod.*;
-
-import static arc.Core.app;
 
 public class HjsonPlusPlusMod extends Mod{
 
     public HjsonPlusPlusMod(){
-        Events.on(EventType.FileTreeInitEvent.class, e ->
-                app.post(HjsonppShaders::load)
-        );
-        ClassMap.classes.put("AdvancedConsumeGenerator", AdvancedConsumeGenerator.class);
-        ClassMap.classes.put("AdvancedHeaterGenerator", AdvancedHeaterGenerator.class);
-        ClassMap.classes.put("TileGenerator", TileGenerator.class);
-        ClassMap.classes.put("AdvancedCoreBlock", AdvancedCoreBlock.class);
-        ClassMap.classes.put("GeneratorCoreBlock", GeneratorCoreBlock.class);
-        ClassMap.classes.put("ChanceCrafter", ChanceCrafter.class);
-        ClassMap.classes.put("AccelItemTurret", AccelItemTurret.class);
-        ClassMap.classes.put("OverHeatTurret", OverHeatTurret.class);
-        ClassMap.classes.put("RestorableWall", RestorableWall.class);
-        ClassMap.classes.put("AdjustableShieldWall", AdjustableShieldWall.class);
-        ClassMap.classes.put("AdjustableBeamNode", AdjustableBeamNode.class);
-        ClassMap.classes.put("TiledFloor", TiledFloor.class);
+        ClassMap.classes.put("AdvancedConsumeGenerator", hjsonpp.expand.AdvancedConsumeGenerator.class);
+        ClassMap.classes.put("AdvancedHeaterGenerator", hjsonpp.expand.AdvancedHeaterGenerator.class);
+        ClassMap.classes.put("TileGenerator", hjsonpp.expand.TileGenerator.class);
+        ClassMap.classes.put("AdvancedCoreBlock", hjsonpp.expand.AdvancedCoreBlock.class);
+        ClassMap.classes.put("GeneratorCoreBlock", hjsonpp.expand.GeneratorCoreBlock.class);
+        ClassMap.classes.put("ColliderCrafter", hjsonpp.expand.ColiderCrafter.class);
+        ClassMap.classes.put("AccelTurret", hjsonpp.expand.AccelTurret.class);
+        ClassMap.classes.put("OverheatTurret", hjsonpp.expand.OverHeatTurret.class);
+        //ClassMap.classes.put("HealingWall", hjsonpp.expand.HealingWall.class);
+        ClassMap.classes.put("AdjustableShieldWall", hjsonpp.expand.AdjustableShieldWall.class);
+        ClassMap.classes.put("AdjustableBeamNode", hjsonpp.expand.AdjustableBeamNode.class);
+        ClassMap.classes.put("TiledFloor", hjsonpp.expand.TiledFloor.class);
         ClassMap.classes.put("DrawTeam", hjsonpp.expand.DrawTeam.class);
         ClassMap.classes.put("EffectWeapon", hjsonpp.expand.EffectWeapon.class);
         ClassMap.classes.put("CustomEffects", hjsonpp.expand.CustomEffects.class);
-        ClassMap.classes.put("BlackHoleBulletType", hjsonpp.expand.BlackHoleBulletType.class);
-        ClassMap.classes.put("ModeTurret", ModeTurret.class);
-        ClassMap.classes.put("MultiRecipeCrafter", MultiRecipeCrafter.class);
-        ClassMap.classes.put("OverloadAbility", OverloadAbility.class);
-        ClassMap.classes.put("RingMesh", RingMesh.class);
-    }
-
-    @Override
-    public void init(){
-        super.init();
-        CustomStyles.load();
-    }
-
-    @Override
-    public void loadContent(){
-        HjsonppLogic.init();
     }
 }
