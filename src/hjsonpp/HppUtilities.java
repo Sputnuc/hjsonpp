@@ -3,6 +3,7 @@ package hjsonpp;
 import arc.func.Cons;
 import arc.math.Mathf;
 import arc.math.geom.Vec2;
+import arc.scene.ui.layout.Table;
 import arc.struct.IntSet;
 import arc.util.Tmp;
 import mindustry.core.World;

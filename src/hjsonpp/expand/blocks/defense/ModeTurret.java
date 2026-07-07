@@ -14,6 +14,7 @@ import arc.util.Nullable;
 import arc.util.Time;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
+import hjsonpp.expand.meta.AdditionalStats;
 import mindustry.Vars;
 import mindustry.entities.Effect;
 import mindustry.entities.Mover;
@@ -32,6 +33,7 @@ import mindustry.world.blocks.defense.turrets.ItemTurret;
 import java.util.Objects;
 
 import static mindustry.Vars.fogControl;
+import static mindustry.Vars.tilesize;
 
 //Extendable class for ItemTurret with different fire modes.
 public class ModeTurret extends ItemTurret{
@@ -82,6 +84,14 @@ public class ModeTurret extends ItemTurret{
     public static class TurretMode{
         @Nullable
         public ObjectMap<Item, BulletType> modeAmmoTypes;
+
+        //Additional description for stats (Write a bundle-key)
+        @Nullable
+        public String description;
+
+        //If true, the stats will display "Base turret stats."
+        public boolean basicStats = false;
+
         //"modname"
         public String path = "hjsonpp";
         public String name = "";
@@ -126,6 +136,41 @@ public class ModeTurret extends ItemTurret{
             this.reloadMultiplier = reloadM;
             this.rotateSpeedMultiplier = rotateSpdM;
         }
+    }
+
+    @Override
+    public void setStats(){
+        super.setStats();
+        stats.add(AdditionalStats.turretMode, table -> {
+            table.row();
+            for(TurretMode t : turretModes){
+                table.table(Styles.grayPanel, tab->{
+                    tab.left();
+                    tab.image(t.icon()).left();
+                    tab.table(st ->{
+                        st.left();
+                        createTextStats(st, t);
+                    }).grow();
+                }).grow().pad(0, 0, 12, 0).row();
+            }
+        });
+    }
+
+    public void createTextStats(Table t, TurretMode mode){
+        t.add("«" + Core.bundle.format("turret.mode." + mode.name) +"»").left().pad(0, 0, 10, 0).color(mode.barColor).row();
+        Color negativeColor = Color.valueOf("ff6e6e");
+        Color positiveColor = Pal.accent;
+        if(mode.basicStats) {
+            t.add(Core.bundle.format("stat-tur-mode-basic-stats")).row();
+            return;
+        }
+        if(mode.reloadMultiplier != 1)  t.add(Core.bundle.format("stat-tur-mode-reload-multiplier", mode.reloadMultiplier * 100)).color(mode.reloadMultiplier > 1 ? positiveColor : negativeColor).left().row();
+        if(mode.accuracyMultiplier != 1) t.add(Core.bundle.format("stat-tur-mode-accuracy-multiplier", mode.accuracyMultiplier * 100)).color(mode.accuracyMultiplier > 1 ? positiveColor : negativeColor).left().row();
+        if(mode.rangeChange != 0) t.add(Core.bundle.format(mode.rangeChange > 0 ? "stat-tur-mode-range-change-positive" : "stat-tur-mode-range-change-negative", mode.rangeChange / tilesize)).color(mode.rangeChange > 0 ? positiveColor : negativeColor).left().row();
+        if(mode.rotateSpeedMultiplier != 1) t.add(Core.bundle.format("stat-tur-mode-rotate-speed-multiplier", mode.rotateSpeedMultiplier * 100)).color(mode.rotateSpeedMultiplier > 1 ? positiveColor : negativeColor).left().row();
+        if(mode.targetIntervalMultiplier != 1) t.add(Core.bundle.format("stat-tur-mode-target-switch-multiplier", mode.targetIntervalMultiplier)).color(mode.targetIntervalMultiplier < 1 ? positiveColor : negativeColor).left().row();
+
+        if(Core.bundle.has("turret.mode." + mode.name + ".description")) t.add(Core.bundle.get("turret.mode." + mode.name + ".description")).left().padTop(8).row();
     }
 
     public class ModeTurretBuild extends ItemTurretBuild{
